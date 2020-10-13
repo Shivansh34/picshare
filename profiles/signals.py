@@ -11,8 +11,8 @@ def post_save_create_profile(sender,instance,created,**kwargs):
 @receiver(post_save,sender=FollowRequest)
 def post_save_send_request(sender,instance,created,**kwargs):
     if instance.receiver.privacy=='public':
-        instance.approved=True
+        instance.status='accepted'
 
-    if instance.approved==True:
-        instance.sender.following.add(instance.receiver.user)
-           
+    if instance.status=='accepted':
+        instance.sender.following.add(instance.receiver)
+        
