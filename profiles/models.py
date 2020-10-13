@@ -8,17 +8,17 @@ request_choices=(('pending','pending'),('accepted','accepted'))
 class Profile(models.Model):
     first_name = models.CharField(max_length=60,blank=True)
     last_name = models.CharField(max_length=60,blank=True)
-    date_of_birth = models.DateField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(default='avatar.png',upload_to='avatars/')
-    bio = models.TextField(max_length=255)
+    bio = models.TextField(max_length=255,blank=True)
     privacy = models.CharField(max_length=7,choices=privacy_choices,default='private')
 
     #Relationships
     user = models.OneToOneField(User,name='user',on_delete=models.CASCADE)
-    following = models.ManyToManyField('self',blank=True,related_name='following',through='FollowRequest')#user object follows
+    following = models.ManyToManyField('self',blank=True,related_name='following')
 
-    
+    def __str__(self):
+        return f"{self.first_name}-{self.created.strftime('%d/%m/%Y')}"
     
 
 class FollowRequest(models.Model):
@@ -27,6 +27,8 @@ class FollowRequest(models.Model):
     sentdate = models.DateTimeField(auto_now_add=True)
     status = models.CharField(choices=request_choices,max_length=8,default='pending')
 
+    def __str__(self):
+        return f"{self.sender}_to_{self.receiver}"
 
 """
 create a request receive function in class for followrequest

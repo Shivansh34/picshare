@@ -6,13 +6,21 @@ from .models import Profile,FollowRequest
 @receiver(post_save,sender=User)
 def post_save_create_profile(sender,instance,created,**kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance,first_name=instance.username)
+
 
 @receiver(post_save,sender=FollowRequest)
 def post_save_send_request(sender,instance,created,**kwargs):
-    if instance.receiver.privacy=='public':
+    if instance.receiver.privacy=='public'and instance.status=='pending':
         instance.status='accepted'
+        instance.save()
 
     if instance.status=='accepted':
         instance.sender.following.add(instance.receiver)
-        
+        instance.sender.save()
+    
+    if instance.status=='pending'and instance.receiver.privacy=='private':
+        instance.sender.following.remove(instance.receiver)
+        instance.sender.save()
+    qs = instance.sender.following.all()
+    print(instance.sender,qs)    
