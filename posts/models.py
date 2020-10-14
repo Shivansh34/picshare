@@ -15,3 +15,8 @@ class Like(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,blank=False,related_name='likers')
     liker = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='liked')
     created = models.DateTimeField(auto_now_add=True)
+
+class Comment(models.Model):
+    commentor = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='comments')
+    post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
+    data = models.CharField(max_length=100,blank=False)

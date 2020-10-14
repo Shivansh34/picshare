@@ -23,9 +23,10 @@ def register(request):
             password = form1.cleaned_data.get('password1')
             user = authenticate(request,username=username,password=password)
             login(request,user)
-    
+            return redirect('profiles:profile')
+        else:
+            print('prob')
     context={
-        'profile' : profile,
         'form1' : form1,
         'form2' : form2,
     }
@@ -41,7 +42,7 @@ def login_view(request):
 
             if user is not None:
                 login(request,user)
-                redirect('profiles:profile')
+                return redirect('profiles:profile')
             else:
                 messages.info(request,'username or password is incorrect')
         
@@ -56,4 +57,4 @@ def profile_view(request):
     context ={
         'profile':profile,
     }
-    return render(request,'profiles/my-profile',context)
+    return render(request,'profiles/my-profile.html',context)
