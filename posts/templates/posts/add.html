@@ -3,9 +3,11 @@
     base
 {% endblock title %}
 {% block content %}
-    <form method="POST">
+<div class="ui segment">
+    <form method="POST" class ="ui form" enctype="multipart/form-data">
         {% csrf_token %}
-        {{post_form.as_p}}
-        <button type="submit">Add</button>
+        {{post_form}}
+        <button name="addpost" type="submit" class="ui button primary">Add</button>
     </form>
+</div>
 {% endblock content %}

@@ -82,3 +82,4 @@ def add(request):
         'post_form' : post_form,
     }
     return render(request,'posts/add.html',context)
+

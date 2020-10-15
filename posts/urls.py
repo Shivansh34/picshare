@@ -8,5 +8,5 @@ urlpatterns = [
     path('addcomment/',addcomment,name='add_comment'),
     path('<pk>/edit/',edit.as_view(),name='edit'),
     path('add/',add,name='add'),
-    #path('deletecomment/<comment_pk>',deletecomment,name='delete_comment'),
+ #   path('deletecomment/<pk>',deletecomment,name='delete_comment'),
 ]
