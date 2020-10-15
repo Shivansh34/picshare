@@ -3,29 +3,59 @@
     feed
 {% endblock title %}
 {% block content %}
+    <div class="ui container">
     {% for post in posts %}
         <div class="ui card">
             <div class="content">
-            <div class="right floated meta">14h</div>
-            <img class="ui avatar image" src="{{ post.op.avatar.url }}"> {{post.op.first_name}}
+                <div class="right floated meta">{{post.created|timesince}}</div>
+                <img class="ui avatar image" src="{{ post.op.avatar.url }}"> {{post.op.first_name}}
             </div>
-            <div class="image" src={{post.image}}>
-            <img>
+            <div class="image">
+                <img src="{{post.image.url}}">
             </div>
             <div class="content">
-            <span class="right floated">
-                <i class="heart outline like icon"></i>
-            </span>
-            <i class="comment icon"></i>
+                    <form action ="{% url 'posts:like_unlike' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_pk" value={{post.pk}}>
+                        <button type="submit" class="ui basic circular icon button ">
+                            {% if profile in post.likes.all %}
+                                <i class="heart icon colored red"></i>
+                            {% else %}
+                                <i class="heart outline icon"></i>
+                            {% endif %}
+                        </button>
+                        {% if post.num_likes %}
+                            {{post.num_likes}} likes
+                        {% endif %}
+                    </form>
+                <i class="comment icon"></i>
+                <div class="ui large transparent left icon input">
+                    <form action="{% url 'posts:add_comment' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_pk" value={{post.pk}}>
+                        <input type="text" name="comment" placeholder="Add Comment...">
+                    </form>
+                </div>
             </div>
             <div class="extra content">
-            <div class="ui large transparent left icon input">
-                <i class="heart outline icon"></i>
-                <form method="POST">
-                    <input type="text" placeholder="Add Comment...">
-                </form>
-            </div>
+                    <div class="ui comments">
+                        {% for comment in post.comments.all %}
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="{{comment.commentor.avatar.url}}">
+                            </a>
+                            <div class="content">
+                                <a class="author">{{comment.commentor.first_name}}</a>
+                                <div class="text">
+                                    {{comment.data}}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
             </div>
         </div>
+    
     {% endfor %}
+</div>
 {% endblock content %}
