@@ -17,6 +17,7 @@
                 <span class="right floated">
                     <form action ="{% url 'posts:like_unlike' %}" method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="current_url" value={{request.path}}>
                         <input type="hidden" name="post_pk" value={{post.pk}}>
                         <button type="submit" class="ui basic circular icon button ">
                             {% if profile in post.likes.all %}
@@ -34,6 +35,7 @@
                     <div class="ui large transparent left icon input">
                         <form action="{% url 'posts:add_comment' %}" method="POST">
                             {% csrf_token %}
+                            <input type="hidden" name="current_url" value={{request.path}}>
                             <input type="hidden" name="post_pk" value={{post.pk}}>
                             <input type="text" name="comment" placeholder="Add Comment...">
                         </form>

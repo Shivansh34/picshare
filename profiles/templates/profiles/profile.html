@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}
+{{profile.first_name}}    
+{% endblock title %}
+{% block content %}
+<div class="ui fluid card">
+    <br><br>
+    <div class="ui grid">
+        <div class="three wide column">
+        </div>
+        <div class="three wide column">
+            <a class="ui medium circular image">
+                <img src="{{ profile.avatar.url }}">
+            </a>
+        </div>
+        <div class="six wide column">
+            <div style="font-family: 'Anaheim';font-size: 35px;margin: 0 0 0 0;" class="ui container">
+                {{profile.user.username}}&nbsp;&nbsp;
+                {% if not personal %}
+                    <a class="ui right labeled icon button" href="{% url 'profiles:profileedit'%}">
+                        <i class="wrench icon"></i>
+                        Update Profile
+                    </a>
+                {% else %}
+                    {% if profile.user in personal.following.all %}
+                        <form action="{% url 'profiles:sendrequest' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="unfollow">
+                            <input type = "hidden" name="profile_pk" value="{{ profile.pk }}">
+                            <input type = "hidden" name="current_url" value="{{ request.path }}">
+                            <button class="ui right labeled icon button">Unfollow</button>
+                        </form>
+                    {% else %}
+                        {% if pending %}
+                            <form action="{% url 'profiles:sendrequest' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="pending">
+                                <input type = "hidden" name="profile_pk" value="{{ profile.pk }}">
+                                <input type = "hidden" name="current_url" value="{{ request.path }}">
+                                <button class="ui right labeled icon button">pending request</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'profiles:sendrequest' %}" method="POST">
+                                {% csrf_token %}
+                                <input type = "hidden" name="profile_pk" value="{{ profile.pk }}">
+                                <input type = "hidden" name="current_url" value="{{ request.path }}">
+                                <button class="ui right labeled icon button">Follow</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="ui three column grid">
+                <div class="row"></div>
+                <div class="row">
+                    <div class="ui column ">
+                        <b>{{profile.posts.all.count}}</b>
+                    </div>
+                    <div class="ui column">
+                        <b>{{profile.following.all.count}}</b>
+                    </div>
+                    <div class="ui column">
+                        <b>{{followers}}</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="ui column">
+                        <b>posts</b>
+                    </div>
+                    <div class="ui column">
+                        <b>following</b>
+                    </div>
+                    <div class="ui column">
+                        <b>followers</b>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <div class="five wide column">
+        </div>
+    </div>
+    <div class="ui grid">
+        <div class="three wide column">
+        </div>
+        <div class="ten wide column">
+            <div class="row">
+               <b> Bio</b>
+            </div>
+            <div class="row">
+                <b>{{profile.bio}}</b>
+            </div>
+        </div>
+        <div class="three wide column">
+        </div>
+    </div>
+    <br>
+    <div class="ui three column grid celled">
+        {% for post in profile.posts.all %}
+        <div class="column">
+          <div class="ui container">
+            <a class="ui large image" href ="">
+                <img src="{{post.image.url}}">
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+</div>
+
+{% endblock content %}

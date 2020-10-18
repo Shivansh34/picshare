@@ -15,11 +15,13 @@ class Profile(models.Model):
 
     #Relationships
     user = models.OneToOneField(User,name='user',on_delete=models.CASCADE)
-    following = models.ManyToManyField('self',blank=True,related_name='following')
+    following = models.ManyToManyField(User,blank=True,related_name='followers')
 
     def __str__(self):
         return f"{self.first_name}-{self.created.strftime('%d/%m/%Y')}"
-    
+
+        
+
 
 class FollowRequest(models.Model):
     sender = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='senders')

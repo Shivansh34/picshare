@@ -23,5 +23,10 @@ class extended_data_form(forms.ModelForm):
         fields = ('bio','avatar','privacy')
 
 class login_form(forms.Form):
-    first_name = forms.CharField(max_length=50,required=True)
+    username = forms.CharField(max_length=50,required=True)
     password = forms.CharField(max_length=50,required=True)   
+
+class edit_form(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields =('first_name','last_name','bio','avatar','privacy',)

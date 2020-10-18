@@ -14,21 +14,19 @@ def my_post_view(request):
     }
     return render(request,'posts/myposts.html',context)
 
-def feed_view(request):
+def explore_view(request):
     profile = Profile.objects.get(user=request.user)
     allposts = Post.objects.all()
-    likes = profile.liked.all()
 
     context={
         'profile' : profile ,
         'posts' : allposts ,
-        'likes' : likes ,
+        'nbar': 'explore',
     }
     return render(request,'posts/feed.html',context)
 
 def like_unlike_post(request):
     if request.method=='POST':
-        print('dun')
         post_pk = request.POST.get('post_pk')
         post = Post.objects.get(pk=post_pk)
         profile = Profile.objects.get(user=request.user) 
@@ -39,8 +37,8 @@ def like_unlike_post(request):
             post.likes.add(profile)
             obj = Like.objects.create(post=post,liker=profile)
             obj.save()
-        
-    return redirect('posts:feed')
+    to_url = request.POST.get('current_url')
+    return redirect(to_url)
 
 def addcomment(request):
     if request.method=='POST':
@@ -50,7 +48,8 @@ def addcomment(request):
         data= request.POST.get('comment')
         comment = Comment.objects.create(post=post,commentor=profile,data=data)
         comment.save()
-    return redirect('posts:feed')
+    to_url = request.POST.get('current_url')
+    return redirect(to_url)
 
 class edit(UpdateView):
     form_class = PostForm
@@ -74,12 +73,40 @@ def add(request):
             newpost = post_form.save(commit=False)
             newpost.op = profile
             newpost.save()
-            return redirect('posts:feed')
+            return redirect('posts:explore')
         else:
             print(post_form.errors.as_data())
             
     context ={
         'post_form' : post_form,
+        'nbar' :'add',
     }
     return render(request,'posts/add.html',context)
 
+def profile_posts_view(request,pk):
+    profile=Profile.objects.get(pk=pk)
+    posts = Post.objects.filter(op=profile)
+    prof = Profile.objects.get(user=request.user)
+
+    context={
+        'profile' : prof ,
+        'posts' : posts ,
+        'nbar': 'home',
+    }
+    return render(request,'posts/feed.html',context)
+
+def profile_followers_views(request):
+    profile = Profile.objects.get(user=request.user)
+    allposts = Post.objects.all()
+    posts = []
+    for post in allposts:
+        if post.op.user in profile.following.all():
+            posts.append(post)
+    prof = Profile.objects.get(user=request.user)
+
+    context={
+        'profile' : prof ,
+        'posts' : posts ,
+        'nbar': 'home',
+    }
+    return render(request,'posts/feed.html',context)

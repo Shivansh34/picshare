@@ -14,10 +14,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
 
-  <title>bffbook - {% block title %}{% endblock title %}</title>
+  <title>picshure - {% block title %}{% endblock title %}</title>
 </head>
 
 <body>
+  {% include 'main\navbar.html' %}
   <div class="ui container">
     {% block content %}
     {% endblock content %}
@@ -25,7 +26,7 @@
 
   {% block scripts %}
   {% endblock scripts %}
-
+  {% include 'main\bottom.html' %}
   <!--Custom js ADD HERE-->
   <script type="text/javascript" src={%static 'main.js' %}></script>
 </body>

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Logout
+{% endblock title %}
+
+{% block content %}
+    <div class="ui form">
+        <form method="POST">
+            {% csrf_token %}
+            <label>confirm you want to logout </label>
+            <button class="ui blue submit button" name="confirm">Logout</button>
+            <button class="ui button" name="cancel">Cancel</button>
+        </form>
+    </div>
+{% endblock content %}
