@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}
+    requests
+{% endblock title %}
+{% block content %}
+<div class="ui cards">
+    {% for frequest in followrequests %}
+        <div class="card">
+        <div class="content">
+            <img class="right floated mini ui image" src={{frequest.sender.avatar.url}}>
+            <div class="header">
+            {{frequest.sender.first_name}}
+            </div>
+            <div class="description">
+            {{frequest.sender.first_name}} &nbsp;{{frequest.sender.last_name}}&nbsp; wants to follow you.
+            </div>
+        </div>
+        <div class="extra content">
+            <div class="ui two buttons">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="freqpk" value={{frequest.pk}}>
+                <button class="ui basic green button" name="accepted">Approve</div>
+                <button class="ui basic red button" name="declined">Decline</div>
+            </form>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+  </div>
+{% endblock content %}

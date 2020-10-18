@@ -1,0 +1,21 @@
+
+{% if nbar %}
+<br><br><br><br>
+<div class="ui container">
+  <div class="ui bottom fixed pointing menu ">
+    <a class="{% if nbar == 'home' %}active{% endif %} item" href="{% url 'profiles:feed'%}" >
+      <i class="home {% if nbar != 'home' %}grey{% endif %} icon large"></i>
+    </a>
+    <a class="{% if nbar == 'add' %}active{% endif %} item" href="{% url 'posts:add' %}">
+      <i class="plus square {% if nbar != 'add' %}outline{% endif %} icon large"></i>
+    </a>
+    <a class="{% if nbar == 'explore' %} active {% endif %}item" href="{% url 'posts:explore' %}">
+      <i class="compass {% if nbar != 'explore' %}grey{% endif %} icon large"></i>
+    </a>
+    <a class="{% if nbar == 'profile' %}active{% endif %} item floated right" href="{% url 'profiles:profile' %}">
+      <img class="ui avatar  image " src="{{profile.avatar.url}}">
+    </a>
+    </div>
+  </div>
+</div>
+{% endif %}

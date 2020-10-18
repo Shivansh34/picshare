@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+login
+{% endblock title %}
+{% block content %}
+<div class="ui placeholder segment">
+    <div class="ui two column very relaxed stackable grid">
+      <div class="column">
+        <div class="ui form">
+            <form method="POST">
+                {% csrf_token %}
+                {{userform.as_p}}
+                <button type="submit" class="ui green submit button">Login</button>
+            </form>
+        </div>
+      </div>
+      <div class="middle aligned column">
+        <form action="{% url 'profiles:register' %}">
+            <button class="ui big button">
+                <i class="signup icon"></i>
+                Sign Up
+            </button>
+        </form>
+      </div>
+    </div>
+    <div class="ui vertical divider">
+      Or
+    </div>
+{% endblock content %}
